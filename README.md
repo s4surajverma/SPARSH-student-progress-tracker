@@ -51,7 +51,7 @@ A web-based Internal Exam / Result Analysis application for schools. Built for K
 ### Quick Start (Windows)
 
 ```bash
-git clone https://github.com/<your-username>/SPARSH-student-progress-tracker.git
+git clone https://github.com/s4surajverma/SPARSH-student-progress-tracker.git
 cd SPARSH-student-progress-tracker
 ```
 
