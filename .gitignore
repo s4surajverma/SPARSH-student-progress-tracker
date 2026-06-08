@@ -1,0 +1,92 @@
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ============================================
+# Virtual Environment
+# ============================================
+venv/
+.venv/
+env/
+
+# ============================================
+# Environment Variables (SECRETS — never commit)
+# ============================================
+.env
+*.env
+!.env.example
+
+# ============================================
+# Database (local SQLite files)
+# ============================================
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# ============================================
+# IDE / Editor
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# ============================================
+# OS Generated
+# ============================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ============================================
+# Alembic (compiled cache)
+# ============================================
+alembic/versions/__pycache__/
+
+# ============================================
+# Logs
+# ============================================
+*.log
+
+# ============================================
+# GCP / Google Credentials (SECRETS)
+# ============================================
+gcp-credentials.json
+credentials.json
+token.json
+*.p12
+
+# ============================================
+# Local storage artifacts (legacy)
+# ============================================
+backend/storage/
+
+# ============================================
+# Test / Scratch files
+# ============================================
+backend/test_results.xlsx
+backend/create_test_excel.py
+backend/test_api.py
+
+# ============================================
+# Byte-compiled / cached
+# ============================================
+*.pyc
+*.pyo
+pip-log.txt
+pip-delete-this-directory.txt

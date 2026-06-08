@@ -1,0 +1,33 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Database ORM & Driver
+sqlalchemy
+psycopg[binary]
+
+# Database Migrations
+alembic
+
+# Data Validation & Configuration
+pydantic
+pydantic-settings
+
+# Security (JWT & Password Hashing)
+python-jose[cryptography]
+cryptography
+bcrypt
+
+# Form Data Parsing (OAuth2 login, file uploads)
+python-multipart
+
+# Excel Parsing (future use)
+pandas
+openpyxl
+
+# Google Drive SDK (OAuth)
+google-api-python-client
+google-auth
+
+# HTTP client for OAuth token exchange
+httpx

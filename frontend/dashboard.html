@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SPARSH</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="/dashboard.html">
+                <div class="auth-logo-icon" style="width: 32px; height: 32px; font-size: 1rem; margin-bottom: 0; margin-right: 10px; border-radius: 8px; box-shadow: none;">S</div>
+                SPARSH Dashboard
+            </a>
+            
+            <!-- Global Active Year Display -->
+            <span class="navbar-text text-light ms-3 d-none d-md-inline" style="background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 12px; font-size: 0.9em;">
+                Academic Year: <strong id="globalActiveYear">Loading...</strong>
+            </span>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white fw-bold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userGreeting">Welcome</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePwdModal">Change Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="sidebar-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-view="home">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-view="search">
+                                Student Search
+                            </a>
+                        </li>
+                        <!-- Role-restricted items -->
+                        <li class="nav-item role-admin role-teacher hidden">
+                            <a class="nav-link" href="#" data-view="import">
+                                Excel Import
+                            </a>
+                        </li>
+                        <li class="nav-item role-admin role-teacher hidden">
+                            <a class="nav-link" href="#" data-view="reports">
+                                Previous Years' Report Cards
+                            </a>
+                        </li>
+                        
+                        <!-- Admin Settings Group -->
+                        <li class="nav-item role-admin hidden mt-3">
+                            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                                <span>Admin Settings</span>
+                            </h6>
+                            <ul class="nav flex-column mb-2">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-view="users">
+                                        User Management
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-view="academic-years">
+                                        Academic Years
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-view="storage-settings">
+                                        Storage Settings
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                
+                <!-- View: Home -->
+                <div id="view-home" class="view-section">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+                        <h1 class="h2 fw-bold text-dark">Dashboard Overview</h1>
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, var(--primary-light), #ffffff);">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-primary text-white rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <svg xmlns="http://www.w3.org/-2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    </div>
+                                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="letter-spacing: 0.05em;">Current User</h6>
+                                </div>
+                                <h3 class="fw-bold mb-1" id="displayRole" style="color: var(--text-main);">Loading...</h3>
+                                <p class="text-muted small mb-0">System Role</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #e0f2fe, #ffffff);">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-info text-white rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <svg xmlns="http://www.w3.org/-2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    </div>
+                                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="letter-spacing: 0.05em;">Active Term</h6>
+                                </div>
+                                <h3 class="fw-bold mb-1" id="displayYear" style="color: var(--text-main);">Loading...</h3>
+                                <p class="text-muted small mb-0">Academic Year</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: User Management -->
+                <div id="view-users" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">User Management</h1>
+                        <button class="btn btn-primary" id="btnNewUser" data-bs-toggle="modal" data-bs-target="#userModal">Add New User</button>
+                    </div>
+                    <div id="usersAlertArea"></div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- View: Academic Years -->
+                <div id="view-academic-years" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Academic Years</h1>
+                        <button class="btn btn-primary" id="btnNewYear" data-bs-toggle="modal" data-bs-target="#yearModal">Add New Year</button>
+                    </div>
+                    <div id="yearsAlertArea"></div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Year Label</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="yearsTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- View: Student Search -->
+                <div id="view-search" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Student Search</h1>
+                    </div>
+
+                    <!-- Search Form -->
+                    <div class="section-card">
+                        <form id="searchForm" class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Class</label>
+                                <select class="form-select" id="searchClass" required>
+                                    <option value="">Select...</option>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Section</label>
+                                <input type="text" class="form-control" id="searchSection" required placeholder="e.g. A">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Roll Number</label>
+                                <input type="number" class="form-control" id="searchRoll" placeholder="(Optional)">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100" id="searchBtn">Search</button>
+                            </div>
+                        </form>
+                        <div id="searchError" class="alert alert-danger mt-3 hidden"></div>
+                    </div>
+
+                    <!-- Search Results Display -->
+                    <div id="searchResultArea" class="hidden">
+                        
+                        <!-- Student Identity Profile -->
+                        <div id="studentIdentityProfile" class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: linear-gradient(135deg, var(--bg-surface), var(--primary-light));">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 mb-3 mb-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 56px; height: 56px; font-size: 1.5rem; font-weight: bold;" id="resInitials">?</div>
+                                        <div>
+                                            <h3 id="resName" class="fw-bold mb-1" style="color: var(--text-main);"></h3>
+                                            <p class="mb-0 text-muted">Admission No: <strong id="resAdm" class="text-dark"></strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-md-end border-md-start ps-md-4">
+                                    <p class="mb-1 text-muted small text-uppercase fw-bold" style="letter-spacing: 0.05em;">Class Info (<span id="resYear"></span>)</p>
+                                    <h5 class="fw-bold text-dark mb-1"><span id="resClass"></span> - <span id="resSection"></span></h5>
+                                    <p class="mb-0 text-muted">Roll No: <strong id="resRoll" class="text-dark"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Tables (Dynamically generated) -->
+                        <div id="resultsContainer"></div>
+
+                        <!-- Historical Reports -->
+                        <div id="studentHistoricalReports" class="section-card mt-4">
+                            <h5 class="mb-3">Previous Years' Report Cards</h5>
+                            <div id="reportsContainer" class="list-group">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- View: Import -->
+                <div id="view-import" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Excel Result Import</h1>
+                    </div>
+
+                    <div id="importAlertArea"></div>
+
+                    <!-- Step 1: Upload Workbook -->
+                    <div class="section-card" id="importStep1">
+                        <h4>Step 1: Upload Workbook</h4>
+                        <form id="importForm" class="row g-3 mt-2">
+                            <div class="col-md-4">
+                                <label class="form-label">Academic Year</label>
+                                <input type="text" class="form-control" id="importYearDisplay" readonly>
+                                <input type="hidden" id="importYearId">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Class</label>
+                                <select class="form-select" id="importClass" required></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Section</label>
+                                <input type="text" class="form-control" id="importSection" required placeholder="e.g. A">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Exam</label>
+                                <select class="form-select" id="importExam" required></select>
+                            </div>
+
+                            <div class="col-md-8 mt-4">
+                                <label class="form-label fw-bold">Excel File (.xlsx)</label>
+                                <input class="form-control" type="file" id="importFile" accept=".xlsx" required>
+                            </div>
+
+                            <div class="col-md-4 mt-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100" id="btnUploadAnalyze">Upload &amp; Analyze</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: Worksheet Selection -->
+                    <div class="section-card hidden" id="importStep2">
+                        <h4>Step 2: Select Worksheet</h4>
+                        <p class="text-muted">The workbook contains multiple worksheets. Please select the one with the result data.</p>
+                        <div id="worksheetRadios" class="mt-3"></div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" id="btnBackToStep1">Back</button>
+                            <button type="button" class="btn btn-primary" id="btnAnalyzeSheet">Analyze Selected Sheet</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Smart Preview -->
+                    <div class="section-card hidden" id="importStep3">
+                        <h4>Step 3: Smart Preview</h4>
+                        <div id="autoTemplateMatch" class="alert alert-info hidden">
+                            <strong>&#10003; Auto-recognized!</strong> This format matches a previously imported workbook.
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-5">
+                                <h6 class="text-muted mb-3">Structure Detection</h6>
+                                <ul class="list-unstyled" id="detectionChecklist">
+                                    <li class="mb-2" id="chkRoll">&#8212; Roll Number</li>
+                                    <li class="mb-2" id="chkName">&#8212; Student Name</li>
+                                    <li class="mb-2" id="chkAdmission">&#8212; Admission Number</li>
+                                </ul>
+                                <div class="mt-3">
+                                    <span class="text-muted small">Detected Header Row: </span>
+                                    <strong id="detectedHeaderRow">0</strong>
+                                    <a href="#" class="ms-2 small" id="btnChangeHeaderRow">Change</a>
+                                    <div class="hidden mt-2" id="headerRowOverride">
+                                        <div class="input-group input-group-sm" style="max-width: 200px;">
+                                            <input type="number" class="form-control" id="headerRowInput" min="0" max="20" value="0">
+                                            <button class="btn btn-outline-primary" id="btnApplyHeaderRow">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-2 bg-light border rounded">
+                                    <strong>Students Found:</strong> <span id="studentsFoundCount" class="fs-5 text-primary">0</span>
+                                </div>
+                            </div>
+                            <div class="col-md-7 border-start">
+                                <h6 class="text-muted mb-3">Detected Subjects</h6>
+                                <div id="detectedSubjectsBadges" class="mb-3"></div>
+                                <div id="noSubjectsWarning" class="alert alert-warning hidden">
+                                    No subjects were automatically detected. Please use the Advanced Options below to map columns manually.
+                                </div>
+                                <h6 class="text-muted mb-3 mt-4">Detected Maximum Marks</h6>
+                                <div id="detectedMaxMarksList" class="mb-3"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h6 class="text-muted mb-2">Data Preview (first 10 rows)</h6>
+                            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                <table class="table table-sm table-bordered table-striped" id="dataPreviewTable">
+                                    <thead id="previewTableHead"></thead>
+                                    <tbody id="previewTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="accordion mt-4" id="advancedImportAccordion">
+                            <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold text-dark" style="background-color: var(--bg-base);" type="button" data-bs-toggle="collapse" data-bs-target="#advancedImportOptions">
+                                        Advanced Options (Manual Mapping &amp; Templates)
+                                    </button>
+                                </h2>
+                                <div id="advancedImportOptions" class="accordion-collapse collapse" data-bs-parent="#advancedImportAccordion">
+                                    <div class="accordion-body">
+                                        <p class="text-muted small">Override the auto-detected mappings if needed.</p>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm">
+                                                <thead><tr><th>Excel Column</th><th>Mapped To</th></tr></thead>
+                                                <tbody id="advancedMappingBody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" id="btnBackFromStep3">Back</button>
+                            <button type="button" class="btn btn-primary" id="btnContinueToImport">Continue to Import</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Pre-Commit Summary -->
+                    <div class="section-card hidden" id="importStep4">
+                        <h4>Step 4: Import Summary</h4>
+                        <div class="row text-center mt-4 mb-4 g-3">
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, var(--primary-light), #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="summaryTotalStudents" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Students Found</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #dcfce7, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="summaryReadyToImport" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Ready to Import</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #fef08a, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="summaryNeedsAttention" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Needs Attention</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="issueRowsArea" class="hidden mb-4">
+                            <h6 class="text-warning">Issues Found</h6>
+                            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                                <table class="table table-sm table-bordered">
+                                    <thead><tr><th>Row</th><th>Issue</th></tr></thead>
+                                    <tbody id="issueRowsBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2" id="btnBackFromStep4">Back</button>
+                            <button type="button" class="btn btn-primary btn-lg" id="btnRunDryRun">Review Import Summary</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Pre-Import Dry Run Summary -->
+                    <div class="section-card hidden" id="importStep5">
+                        <h4>Step 5: Pre-Import Summary</h4>
+                        <div class="alert alert-info mt-3">
+                            Review the changes that will be made to the database. No data has been saved yet.
+                        </div>
+                        <div class="row text-center mt-4 mb-4 g-3">
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #dcfce7, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunStudentsCreated" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">New Students</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, var(--primary-light), #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunStudentsMatched" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Existing Students Matched</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #e0f2fe, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunEnrollmentsCreated" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">New Enrollments</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #fef08a, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunSkipped" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Rows Skipped</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #f3e8ff, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunResultsImported" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Results to Import</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background: linear-gradient(135deg, #fee2e2, #ffffff);">
+                                    <h3 class="fw-bold mb-1" id="dryRunWarnings" style="color: var(--text-main);">0</h3>
+                                    <p class="text-muted small mb-0 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Warnings</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mb-3">
+                            <button type="button" class="btn btn-outline-danger hidden" id="btnToggleWarnings">View Warnings</button>
+                        </div>
+
+                        <div id="dryRunWarningsArea" class="hidden mb-4">
+                            <h6 class="text-danger">Warnings Found (Data mismatch, no overwrite)</h6>
+                            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                                <table class="table table-sm table-bordered">
+                                    <thead><tr><th>Row</th><th>Adm No</th><th>Warning Message</th></tr></thead>
+                                    <tbody id="dryRunWarningsBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2" id="btnBackFromStep5">Back</button>
+                            <button type="button" class="btn btn-success btn-lg" id="btnConfirmImport">Confirm & Import Data</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Import Complete -->
+                    <div class="section-card hidden" id="importStep6">
+                        <h4>Import Complete</h4>
+                        <div id="importSummaryArea"></div>
+                        <button class="btn btn-primary mt-3" id="btnNewImport">Start New Import</button>
+                    </div>
+                </div>
+
+                <!-- View: Reports -->
+                <div id="view-reports" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Previous Years' Report Cards</h1>
+                    </div>
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs" id="reportsTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-upload" type="button" role="tab">Single Upload</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-upload" type="button" role="tab">Bulk ZIP Upload</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content pt-4" id="reportsTabContent">
+                        
+                        <!-- Single Upload Tab -->
+                        <div class="tab-pane fade show active" id="single-upload" role="tabpanel">
+                            <div class="section-card">
+                                <form id="singleReportForm" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Admission Number</label>
+                                        <input type="text" class="form-control" id="singleAdm" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Academic Year</label>
+                                        <select class="form-select" id="singleYear" required></select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">PDF File</label>
+                                        <input class="form-control" type="file" id="singleFile" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-primary" id="btnSingleUpload">Upload Report</button>
+                                    </div>
+                                </form>
+                                <div id="singleAlertArea" class="mt-3"></div>
+                            </div>
+                        </div>
+
+                        <!-- Bulk ZIP Upload Tab -->
+                        <div class="tab-pane fade" id="bulk-upload" role="tabpanel">
+                            <div class="section-card" id="bulkStep1">
+                                <h5>Upload ZIP Archive</h5>
+                                <p class="text-muted small">ZIP file must contain PDFs named as: <code>AdmissionNumber_AcademicYear.pdf</code> (e.g. <code>2024001_2023-2024.pdf</code>)</p>
+                                <form id="bulkReportForm" class="row g-3">
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="file" id="bulkZipFile" accept=".zip" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-secondary w-100" id="btnPreviewZip">Preview Content</button>
+                                    </div>
+                                </form>
+                                <div id="bulkAlertArea" class="mt-3"></div>
+                            </div>
+
+                            <!-- Bulk ZIP Preview -->
+                            <div class="section-card hidden" id="bulkStep2">
+                                <h5>ZIP Preview</h5>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4"><strong>Total Files:</strong> <span id="zipTotal">0</span></div>
+                                    <div class="col-sm-4 text-success"><strong>Matched:</strong> <span id="zipMatched">0</span></div>
+                                    <div class="col-sm-4 text-danger"><strong>Errors/Duplicates:</strong> <span id="zipErrors">0</span></div>
+                                </div>
+                                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-sm">
+                                        <thead><tr><th>Filename</th><th>Status</th><th>Message</th></tr></thead>
+                                        <tbody id="zipTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-4 text-end">
+                                    <button type="button" class="btn btn-outline-secondary me-2" id="btnCancelZip">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="btnConfirmZip">Confirm Upload</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Bulk ZIP Outcome -->
+                            <div class="section-card hidden" id="bulkStep3">
+                                <h5>Upload Complete</h5>
+                                <div id="zipOutcomeArea"></div>
+                                <button class="btn btn-outline-primary mt-3" id="btnNewZip">Upload Another ZIP</button>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                <!-- View: Storage Settings -->
+                <div id="view-storage-settings" class="view-section hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2 fw-bold text-dark">Storage Settings</h1>
+                    </div>
+
+                    <div id="storageAlertArea"></div>
+
+                    <!-- Current Status Panel -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" id="storageStatusPanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 fw-bold">Storage Provider: <span class="text-primary" id="statusProvider">Google Drive</span></h5>
+                        </div>
+                        
+                        <div id="driveDetailedStatus">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="text-muted mb-3 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Configuration Checklist</h6>
+                                    <ul class="list-unstyled" id="driveChecklist">
+                                        <li class="mb-2"><span id="chkGoogleConnected">—</span> Google Account Connected</li>
+                                        <li class="mb-2"><span id="chkFolderUrl">—</span> Folder URL Saved</li>
+                                        <li class="mb-2"><span id="chkFolderVerified">—</span> Folder Access Verified</li>
+                                        <li class="mb-2"><span id="chkUploadTest">—</span> Upload Test Passed</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 border-start">
+                                    <h6 class="text-muted mb-3 fw-bold text-uppercase" style="letter-spacing: 0.05em;">Verification History</h6>
+                                    <p class="mb-1 small text-muted">Last Verification:</p>
+                                    <p class="fw-bold mb-3" id="histLastVerified">—</p>
+                                    
+                                    <p class="mb-1 small text-muted">Last Successful Upload Test:</p>
+                                    <p class="fw-bold mb-0" id="histLastUpload">—</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Form -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4">
+                        <h5 class="mb-4 fw-bold">Configure Google Drive</h5>
+
+                        <!-- Google Drive Configuration (always shown) -->
+                        <div id="driveConfigSection">
+                            
+                            <!-- Step 1: Connect Google Account -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Step 1: Connect Google Account</h6>
+                                <p class="text-muted small mb-3">Sign in with your Google account to allow SPARSH to upload report cards to your Drive.</p>
+                                
+                                <!-- Not Connected State -->
+                                <div id="googleNotConnected">
+                                    <button type="button" class="btn btn-primary d-flex align-items-center gap-2" id="btnConnectGoogle">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+                                        Connect Google Drive
+                                    </button>
+                                    <div id="oauthUnavailable" class="alert alert-warning mt-3 hidden">
+                                        Google Drive integration is not configured on this server. Contact the system administrator.
+                                    </div>
+                                </div>
+
+                                <!-- Connected State -->
+                                <div id="googleConnected" class="hidden">
+                                    <div class="card border-0 rounded-4 p-3" style="background: linear-gradient(135deg, #dcfce7, #ffffff);">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="text-success fw-bold">✓ Connected</span>
+                                                <p class="mb-0 text-muted small mt-1">Signed in as: <strong id="connectedGoogleEmail" class="text-dark"></strong></p>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" id="btnDisconnectGoogle">Disconnect</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+
+                            <!-- Step 2: Folder Verification -->
+                            <div class="mb-3" id="folderVerificationArea">
+                                <h6 class="fw-bold">Step 2: Select Drive Folder</h6>
+                                <p class="text-muted small mb-2">Paste the URL of the Google Drive folder where report cards should be stored.</p>
+                                
+                                <label class="form-label">Google Drive Folder URL</label>
+                                <input type="text" class="form-control" id="driveFolderUrl" placeholder="https://drive.google.com/drive/folders/xxxxxxxxxxxx" disabled>
+                            </div>
+
+                            <div class="mb-3 d-flex gap-2">
+                                <button type="button" class="btn btn-outline-primary" id="btnVerifyFolder">Verify Folder</button>
+                                <button type="button" class="btn btn-outline-success hidden" id="btnTestUpload">Test Upload</button>
+                            </div>
+
+                            <!-- Verification Result Area -->
+                            <div id="verifyResultArea" class="hidden"></div>
+                        </div>
+
+                        <hr>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-primary" id="btnSaveStorage" disabled>Save Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- User Management Modal (Create/Edit) -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="userForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userModalTitle">Add New User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="userId">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="userUsername" required>
+                            <small class="text-muted" id="userUsernameHelp">Used for logging in.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="userFullName" required>
+                        </div>
+                        <div class="mb-3" id="passwordGroup">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="userPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" id="userRole" required>
+                                <option value="teacher">Teacher</option>
+                                <option value="principal">Principal</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSaveUser">Save User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal (Admin) -->
+    <div class="modal fade" id="resetPwdModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="resetPwdForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reset User Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="resetUserId">
+                        <p>Resetting password for <strong id="resetUserUsername"></strong></p>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="resetNewPassword" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger" id="btnConfirmReset">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal (Personal) -->
+    <div class="modal fade" id="changePwdModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="changePwdForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Change Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="changePwdAlert"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="changeCurrentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="changeNewPassword" required minlength="6">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="changeConfirmPassword" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSaveNewPassword">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Academic Year Modal -->
+    <div class="modal fade" id="yearModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="yearForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="yearModalTitle">Add Academic Year</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="yearId">
+                        <div class="mb-3">
+                            <label class="form-label">Year Label</label>
+                            <input type="text" class="form-control" id="yearLabel" required placeholder="e.g. 2024-2025">
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="yearIsCurrent">
+                            <label class="form-check-label" for="yearIsCurrent">
+                                Set as Current Academic Year
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSaveYear">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/academic_years.js"></script>
+    <script src="/js/storage_settings.js"></script>
+    <script src="/js/import.js"></script>
+    <script src="/js/reports.js"></script>
+    <script src="/js/users.js"></script>
+</body>
+</html>
