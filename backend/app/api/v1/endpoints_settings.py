@@ -229,9 +229,9 @@ async def oauth_callback(
     Exchanges the auth code for tokens, stores the refresh token,
     and redirects back to the dashboard.
     """
-    # Base URL for the dashboard
-    dashboard_url = "/dashboard.html"
-    hash_fragment = "#storage-settings"
+    # Base URL for the storage settings page
+    dashboard_url = "/storage-settings"
+    hash_fragment = ""
 
     if error:
         logger.warning(f"OAuth denied by user: {error}")

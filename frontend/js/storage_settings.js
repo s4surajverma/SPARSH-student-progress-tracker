@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = params.get('email') || '';
             showAlert(`Successfully connected Google Drive as <strong>${decodeURIComponent(email)}</strong>.`, 'success');
             // Clean URL
-            history.replaceState(null, '', '/dashboard.html#storage-settings');
+            history.replaceState(null, '', '/storage-settings');
         } else if (params.has('oauth_error')) {
             const error = params.get('oauth_error');
             let msg = 'Google Drive connection failed.';
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (error === 'no_refresh_token') msg = 'Failed to obtain a refresh token. Please try again.';
             else if (error === 'token_exchange_failed') msg = 'Failed to exchange authorization code. Please try again.';
             showAlert(msg);
-            history.replaceState(null, '', '/dashboard.html#storage-settings');
+            history.replaceState(null, '', '/storage-settings');
         }
     }
 

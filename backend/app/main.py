@@ -7,10 +7,12 @@ Mounts routers, exception handlers, and static files.
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -25,6 +27,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
+
+# Path to the frontend directory
+FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
 
 
 # ============================================
@@ -82,7 +87,26 @@ def health_check():
     }
 
 
+# --- SPA Catch-All Routes ---
+# Serve dashboard.html for all clean page URLs.
+# This allows the frontend to handle routing via the History API.
+SPA_PAGES = ["home", "search", "import", "reports", "users", "academic-years", "storage-settings", "about"]
+
+
+@app.get("/{page_name}", include_in_schema=False)
+async def spa_catch_all(page_name: str):
+    """Serve the dashboard SPA for known page routes."""
+    if page_name in SPA_PAGES:
+        return FileResponse(FRONTEND_DIR / "dashboard.html", media_type="text/html")
+    # Fall through to static file mount for CSS/JS/other assets
+    file_path = FRONTEND_DIR / page_name
+    if file_path.is_file():
+        return FileResponse(file_path)
+    # Default: serve index.html for unknown paths
+    return FileResponse(FRONTEND_DIR / "index.html", media_type="text/html")
+
+
 # --- Static File Mounting (Frontend) ---
 # Mount the frontend directory to serve HTML/CSS/JS files.
 # This must be the LAST mount to avoid intercepting API routes.
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")

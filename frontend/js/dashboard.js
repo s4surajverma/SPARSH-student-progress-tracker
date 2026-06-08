@@ -26,10 +26,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // --- 3. View Navigation ---
+    // Map of URL path segments to view IDs
+    const validViews = ['home', 'search', 'import', 'reports', 'users', 'academic-years', 'storage-settings', 'about'];
+
     const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
     const views = document.querySelectorAll('.view-section');
 
-    function switchView(viewId) {
+    function getViewFromPath() {
+        // Extract view name from pathname (e.g., "/search" → "search", "/storage-settings" → "storage-settings")
+        const path = window.location.pathname.replace(/^\/+|\/+$/g, ''); // trim slashes
+        
+        // Support legacy hash-based URLs for backwards compatibility
+        if (!path || path === 'dashboard.html') {
+            const hash = window.location.hash.substring(1);
+            return (hash && validViews.includes(hash)) ? hash : 'home';
+        }
+        
+        return validViews.includes(path) ? path : 'home';
+    }
+
+    function switchView(viewId, pushState = true) {
         // Update active nav link
         navLinks.forEach(link => {
             if (link.dataset.view === viewId) {
@@ -48,9 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        // Update the URL hash
-        if (window.location.hash !== `#${viewId}`) {
-            history.pushState(null, null, `#${viewId}`);
+        // Update the URL path
+        const targetPath = `/${viewId}`;
+        if (pushState && window.location.pathname !== targetPath) {
+            history.pushState({ view: viewId }, '', targetPath);
         }
     }
 
@@ -64,21 +81,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', () => {
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-            switchView(hash);
-        } else {
-            switchView('home');
-        }
+        const viewId = getViewFromPath();
+        switchView(viewId, false);
     });
 
-    // Handle initial load based on hash
-    const initialHash = window.location.hash.substring(1);
-    if (initialHash) {
-        switchView(initialHash);
-    } else {
-        switchView('home');
-    }
+    // Handle initial load based on URL path
+    const initialView = getViewFromPath();
+    switchView(initialView, false);
 
     // --- 4. Logout ---
     document.getElementById('logoutBtn').addEventListener('click', (e) => {

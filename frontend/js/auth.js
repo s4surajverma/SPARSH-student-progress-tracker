@@ -5,8 +5,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // If we're on the login page but already have a token, redirect to dashboard
-    if (apiClient.getToken() && window.location.pathname.endsWith('index.html')) {
-        window.location.href = '/dashboard.html';
+    const path = window.location.pathname;
+    if (apiClient.getToken() && (path.endsWith('index.html') || path === '/')) {
+        window.location.href = '/home';
         return;
     }
 
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('user_name', profile.full_name);
 
                 // Redirect to dashboard
-                window.location.href = '/dashboard.html';
+                window.location.href = '/home';
 
             } catch (error) {
                 // Show error
