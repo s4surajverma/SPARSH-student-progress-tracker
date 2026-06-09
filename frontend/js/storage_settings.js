@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCheckmark(el, status) {
         if (!el) return;
         if (status === 'yes') {
-            el.innerHTML = '<span class="text-success fw-bold">✓</span>';
+            el.innerHTML = '<span class="badge bg-success rounded-pill me-2" style="width: 65px;">Done</span>';
         } else if (status === 'no') {
-            el.innerHTML = '<span class="text-danger fw-bold">✗</span>';
+            el.innerHTML = '<span class="badge bg-danger rounded-pill me-2" style="width: 65px;">Action</span>';
         } else {
-            el.innerHTML = '<span class="text-muted">—</span>';
+            el.innerHTML = '<span class="badge bg-secondary rounded-pill me-2" style="width: 65px;">Pending</span>';
         }
     }
 
